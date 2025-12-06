@@ -1,0 +1,57 @@
+﻿@page "/"
+@using Project.Shared.Models.Dtos
+@using System.Text.Json
+@inject IJSRuntime JS
+@inject IRepositorio repositorio
+<button @onclick="DibujarCamino">Dibujar Camino</button>
+<div id="map" style="height: 500px;"></div>
+
+
+@code {
+
+    
+    private async Task< List<CoordenadaLeaflet>> coordenadasGet()
+    {
+
+        var responseHttp = await repositorio.Get<List<CoordenadaLeaflet>>($"api/TrackMobileLocation/GetTrackMobileLocationLeaLeft");
+        List<CoordenadaLeaflet> coordenadas = responseHttp.Response;
+
+
+
+        // var  coordenadasDemo = new List<CoordenadaLeaflet>
+        // {
+        //     new CoordenadaLeaflet { Lat = "40.7128", Lng = "-74.0060" }, // Nueva York
+        //     new CoordenadaLeaflet { Lat = "34.0522", Lng = "-118.2437" }, // Los Ángeles
+        //     new CoordenadaLeaflet { Lat = "41.8781", Lng = "-87.6298" } , // Chicago
+        //      new CoordenadaLeaflet { Lat = "45.8781", Lng = "-82.6298" }  // xxxx
+        // };
+
+        return coordenadas;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Inicializa el mapa una sola vez
+            await JS.InvokeVoidAsync("initializeMap");
+
+            // Llama a la función DibujarCamino para mostrar el camino al cargar la página
+            //  await DibujarCamino();
+        }
+    }
+
+    private async Task DibujarCamino()
+    {
+        // Envía las coordenadas a JavaScript para que dibuje el camino
+        List<CoordenadaLeaflet> coordenadasList = await coordenadasGet();
+
+        var coordenadasJson = JsonSerializer.Serialize(coordenadasList);
+
+        // Pasar el JSON a JavaScript
+        await JS.InvokeVoidAsync("dibujarCamino", coordenadasJson);
+
+
+
+    }
+}

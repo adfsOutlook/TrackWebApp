@@ -1,0 +1,15 @@
+﻿<div id="breadcrumb" style="background-color:#eaeaea;margin-top:40px;padding-left:0px">
+    <a href="/" title="Home" class="tip-bottom" style="padding-right: 0px;padding-left: 0px;">
+        <i class="oi oi-home" style="margin-bottom:5px">@Titulo </i>
+    </a>
+    >
+    <a href="/" class="current" style="padding-right: 0px;padding-left: 0px;">
+        <span id="lblTitulo" class="titulo-pagina">@SubTitulo </span>
+    </a>
+</div>
+
+@code {
+    [Parameter] public string Titulo { get; set; }
+    [Parameter] public string SubTitulo { get; set; }
+
+}

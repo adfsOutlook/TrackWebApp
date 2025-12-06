@@ -1,0 +1,105 @@
+﻿@using Project.Client.Services
+@inherits LayoutComponentBase
+@inject IMenuService MenuService
+@inject IJSRuntime JsRuntime
+@inject NavigationManager navigationManager
+
+@using Project.Client.Helpers
+
+
+@using System.Text.Json
+@inject IRepositorio repositorio
+@inject IJSRuntime JsRuntime
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager Navigation
+@inject IMenuService MenuService
+
+
+@* <div class="page" style="min-height: 100vh; max-height: 100vh; overflow-y: hidden; position: relative;"> *@
+    <div class="main" style="background-image: radial-gradient(circle, #5499c7, #4f94c2, #4790bd, #3e8cb8, #3588b4, #2d84af, #2680aa, #2980b9); margin: 0; position: absolute; top: 0; bottom: 0; height: 100vh; width: 100vw;">
+
+    <main>
+        <div style="background-color: #ffe200">
+            <LoginDisplay />
+        </div>
+
+        <div class="row justify-content-start" style="justify-content: flex-start; min-height: 100vh; overflow-y: auto; position: relative;">
+            <div class="col-md-2" style="margin-left:0px; padding-left:0px; padding-right:0px; background:#444444;">
+                @if (MenuService.IsMenuVisible)
+                {
+                    <NavMenu />
+                }
+            </div>
+            <div class="col-md-10" style="padding-left: 0px; padding-right: 0px; overflow-y: auto;margin-bottom: 120px;">
+                @Body
+            </div>
+        </div>
+
+        <div class="footer" style="position: absolute; background:#000000 !important; bottom: 0; left: 0; justify-content: flex-end; height: 3.5rem; padding-left: 0 !important; padding-right: 0 !important; width: 100% !important; align-items: center;">
+            <div class="row" style="background:#000000 !important;">
+                <div class="col-sm-4">
+                    <div id="footer-imgbsas">
+                        <img src="/images/Logo-BsAs-Footer.png">
+                    </div>
+                </div>
+                <div class="col-sm-4 pull-right">
+                    <div style="color: white">
+                        Bla Bla Bla Bla Bla 
+                        <div>
+                            <span class="text-muted">Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla </span>
+                        </div>
+                    </div>
+                    <div style="font-size: x-small" class="text-muted">
+                        <div id="ctl09">
+                            <span id="lblVersion">[Version 1 Revision 31838]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+
+@code {
+    protected override async void OnInitialized()
+    {
+        //  MenuService.ToggleMenu(false);
+
+
+        MenuService.OnMenuVisibilityChange += RefreshUI;
+    }
+    private void RefreshUI(bool isVisible)
+    {
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await JsRuntime.InicializarTimerInactivo(DotNetObjectReference.Create(this));
+
+    }
+
+    [JSInvokable]
+    public async Task LogOut()
+    {
+        Timer timer = new Timer(async (state) =>
+    {
+        // Redirigir al usuario a la página especificada después de 30 segundos
+       // await InvokeAsync(() => navigationManager.NavigateTo("/"));
+        await InvokeAsync(() => navigationManager.NavigateTo(navigationManager.BaseUri, forceLoad: true));
+    }, null, 10000, Timeout.Infinite);
+
+
+
+        var confirmacion = await mostrarMensajes.MostrarMensajeConfimacion("Confirmar", "Necesita mas tiempo?", "question");
+        timer.Dispose();
+        if (confirmacion)
+        {
+            await JsRuntime.InicializarTimerInactivo(DotNetObjectReference.Create(this));
+        }
+        else
+            navigationManager.NavigateTo("/");
+    }
+
+}

@@ -1,0 +1,53 @@
+﻿@page "/inicio"
+@using Project.Client.Helpers
+@using System.Security.Claims
+@using Microsoft.AspNet.Identity.EntityFramework
+ *@@using System.Text.Json
+@inject IRepositorio repositorio
+@inject IJSRuntime JsRuntime
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mostrarMensajes
+@inject IJSRuntime JsRuntime
+<div id="content" style="min-height: 667px;margin-left:0">
+    <RouteBanner Titulo="INICIO" SubTitulo="Home Page" />
+
+</div>
+
+
+
+@code {
+  //  private ClaimsPrincipal usuarioActual;
+
+    protected bool IsVisible = true;
+    private int pagado = 0;
+    private int sinPagar = 0;
+    private int CantidadCuposUsados = 0;
+    private int CantidadObleasUsadas = 0;
+    protected override async Task OnInitializedAsync()
+    {
+
+
+    
+
+       
+
+        
+
+    }
+
+    private async Task btnCollapse(string _control)
+    {
+        switch (_control)
+        {
+            case "Resumen":
+                IsVisible = !IsVisible;
+                break;
+            default:
+                Console.WriteLine("??");
+                break;
+        }
+
+    }
+    
+
+}

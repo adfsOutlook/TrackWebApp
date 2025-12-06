@@ -1,0 +1,180 @@
+﻿@using static Project.Client.Pages.SyncFusion.SyncFusionABM
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Calendars
+
+@using System.Text.Json
+@using static Project.Client.Pages.Domain
+@using static Project.Client.Pages.Domain
+
+@inject IJSRuntime JsRuntime
+<div class="modal-backdrop show"></div>
+
+<div class="modal fade show" id="exampleModal" tabindex="-1"
+     role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" style="display: block;display: flex;justify-content: center;align-items: center;">
+
+    <div class="modal-dialog" role="document" style="        width: 1000px;
+        top: 0px;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding:0;margin:10px">
+
+
+
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">LugarEntregaId</label>
+                    </div>
+                    <div class="col-sm-6">
+                          <SfNumericTextBox TValue="int"  @bind-Value="@SelectedItem.LugarEntregaId" Enabled=false ></SfNumericTextBox>
+                    </div>
+                </div>
+
+                 <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">NumeroPedido</label>
+                    </div>
+                    <div class="col-sm-6">
+                          <SfNumericTextBox TValue="int"  @bind-Value="@SelectedItem.NumeroPedido" Enabled=false ></SfNumericTextBox>
+                    </div>
+                </div>
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Calle</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTextBox Type="Syncfusion.Blazor.Inputs.InputType.Text" @bind-Value="@SelectedItem.Calle" Placeholder="Calle" ></SfTextBox>
+                        @* <ValidationMessage For="@(() => Syncfusion.Blazor.Inputs.InputType.Email)" />*@
+                    </div>
+                </div>
+
+
+                  <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Numero</label>
+                    </div>
+                    <div class="col-sm-6">
+                          <SfNumericTextBox TValue="int"  @bind-Value="@SelectedItem.Numero"  ></SfNumericTextBox>
+                    </div>
+                </div>
+
+
+               <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">CP</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTextBox Type="Syncfusion.Blazor.Inputs.InputType.Text" @bind-Value="@SelectedItem.CP" Placeholder="Codigo Postal" ></SfTextBox>
+                        @* <ValidationMessage For="@(() => Syncfusion.Blazor.Inputs.InputType.Email)" />*@
+                    </div>
+                </div>
+         
+              
+
+                 <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Hora</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTimePicker TValue="DateTime?"  @bind-Value="@FechaHoraDesde">
+                            <TimePickerEvents TValue="DateTime?"   ValueChange="HoraDesdeValueChangeHandler"></TimePickerEvents>
+                        </SfTimePicker>
+                    </div>
+                </div>
+
+                 <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Hora</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTimePicker TValue="DateTime?"  @bind-Value="@FechaHoraHasta">
+                            <TimePickerEvents TValue="DateTime?"   ValueChange="HoraHastaValueChangeHandler"></TimePickerEvents>
+                        </SfTimePicker>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+
+            <div class="modal-footer" style="        padding: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;">
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <button @onclick="@(() => onSaveLugarEntrega.InvokeAsync(SelectedItem))" type="button" class="btn btn-success" style="width: 150px;border: 0;margin:5px">Guardar</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button @onclick="@(() => onCancelLugarEntrega.InvokeAsync())" type="button" class="btn btn-success" style="width: 150px;border: 0;margin:5px">Cancelar</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+
+    [Parameter]
+    public LugarEntrega SelectedItem { get; set; }
+
+  
+    [Parameter] 
+    public EventCallback<LugarEntrega> onSaveLugarEntrega { get; set; }
+    
+    [Parameter] 
+    public EventCallback onCancelLugarEntrega { get; set; }
+
+
+     public DateTime? FechaHoraDesde { get; set; }
+     public DateTime? FechaHoraHasta { get; set; }
+      protected override async void OnInitialized()
+    {
+
+        if (!string.IsNullOrEmpty(SelectedItem.HoraDesde))
+        {
+            int hora = int.Parse(SelectedItem.HoraDesde.Substring(0, 2));
+             int minuto = int.Parse(SelectedItem.HoraDesde.Substring(3, 2));
+            FechaHoraDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hora, minuto, 00);
+        }
+         if (!string.IsNullOrEmpty(SelectedItem.HoraHasta))
+        {
+            int hora = int.Parse(SelectedItem.HoraHasta.Substring(0, 2));
+             int minuto = int.Parse(SelectedItem.HoraHasta.Substring(3, 2));
+            FechaHoraHasta = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hora, minuto, 00);
+        }
+
+
+    }
+   public void HoraDesdeValueChangeHandler(Syncfusion.Blazor.Calendars.ChangeEventArgs<DateTime?> args)
+    {
+        SelectedItem.HoraDesde = ((DateTime)args.Value).ToString("HH:mm:ss");
+    }
+     public void HoraHastaValueChangeHandler(Syncfusion.Blazor.Calendars.ChangeEventArgs<DateTime?> args)
+    {
+        SelectedItem.HoraHasta = ((DateTime)args.Value).ToString("HH:mm:ss");
+    }
+  
+
+}

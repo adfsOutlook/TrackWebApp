@@ -1,0 +1,198 @@
+﻿@using static Project.Client.Pages.SyncFusion.SyncFusionABM
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Calendars
+
+@using System.Text.Json
+@using static Project.Client.Pages.Domain
+@inject IJSRuntime JsRuntime
+<div class="modal-backdrop show"></div>
+
+<div class="modal fade show" id="exampleModal" tabindex="-1"
+     role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" style="display: block;display: flex;justify-content: center;align-items: center;">
+
+    <div class="modal-dialog" role="document" style="        width: 1000px;
+        top: 0px;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding:0;margin:10px">
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">CUIT</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfMaskedTextBox Mask="00-00000000-0" @bind-Value="@SelectedItem.CUIT"
+                                         Enabled="false"></SfMaskedTextBox>
+                    </div>
+                </div>
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">NumeroPedido</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfNumericTextBox TValue="int" @bind-Value="@SelectedItem.NumeroPedido" Enabled="@(SelectedItem.NumeroPedido==0)"></SfNumericTextBox>
+                    </div>
+                </div>
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Fecha </label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfDatePicker TValue="DateTime" @bind-Value="@SelectedItem.Fecha" Placeholder="Seleccione Fecha" ShowClearButton="true"></SfDatePicker>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Hora</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTimePicker TValue="DateTime?"  @bind-Value="@Fecha">
+                            <TimePickerEvents TValue="DateTime?"   ValueChange="HoraValueChangeHandler"></TimePickerEvents>
+                        </SfTimePicker>
+                    </div>
+                </div>
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Precio</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfNumericTextBox TValue="Decimal" @bind-Value="@SelectedItem.Precio"></SfNumericTextBox>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Fecha Desde-Hasta</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfDateRangePicker TValue="DateTime" @bind-StartDate="@SelectedItem.FechaDesde" @bind-EndDate="@SelectedItem.FechaHasta" Placeholder="Seleccione Fechas" ShowClearButton="true"></SfDateRangePicker>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Articulo</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTextBox Type="Syncfusion.Blazor.Inputs.InputType.Text" @bind-Value="@SelectedItem.Articulo" Placeholder="Enter Articulo"></SfTextBox>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Descripcion</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfTextBox Type="Syncfusion.Blazor.Inputs.InputType.Text" @bind-Value="@SelectedItem.Descripcion" Placeholder="Enter Descripcion"></SfTextBox>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <label style="color:black;font-size: 0.8em;align-content:end;margin-left:5px">Calle</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <SfMultiSelect TValue="string[]" Placeholder="LugaresEntrega" Mode="VisualMode.CheckBox" TItem="LugarEntrega" DataSource="@lugaresEntregaList">
+                            <MultiSelectFieldSettings Text="Calle" Value="Numero"></MultiSelectFieldSettings>
+                        </SfMultiSelect>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+
+            <div class="modal-footer" style="        padding: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;">
+
+                <div class="row" style="padding: 0;justify-content: center;margin-top:10px;">
+                    <div class="col-sm-6">
+                        <button @onclick="@(() => onSavePedido.InvokeAsync(SelectedItem))" type="button" class="btn btn-success" style="width: 150px;border: 0;margin:5px">Guardar</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button @onclick="@(() => onCancelPedido.InvokeAsync())" type="button" class="btn btn-success" style="width: 150px;border: 0;margin:5px">Cancelar</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>Show something from SelectedItem: @SelectedItem.CUIT</div>
+
+@code {
+
+    [Parameter]
+    public Pedido SelectedItem { get; set; }
+
+    [Parameter]
+    public List<LugarEntrega> lugaresEntregaList { get; set; }
+
+    [Parameter]
+    public EventCallback<Pedido> onSavePedido { get; set; }
+
+    [Parameter]
+    public EventCallback onCancelPedido { get; set; }
+
+    public DateTime? Fecha { get; set; }
+    public DateTime? Fecha2 { get; set; }
+    protected override async void OnInitialized()
+    {
+
+        if (!string.IsNullOrEmpty(SelectedItem.Hora))
+        {
+            int hora = int.Parse(SelectedItem.Hora.Substring(0, 2));
+             int minuto = int.Parse(SelectedItem.Hora.Substring(3, 2));
+            Fecha = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hora, minuto, 00);
+        }
+
+
+
+    }
+
+    public void HoraValueChangeHandler(Syncfusion.Blazor.Calendars.ChangeEventArgs<DateTime?> args)
+    {
+        SelectedItem.Hora = ((DateTime)args.Value).ToString("HH:mm:ss");
+    }
+
+
+}

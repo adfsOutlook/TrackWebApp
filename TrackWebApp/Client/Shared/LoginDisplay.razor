@@ -1,0 +1,134 @@
+﻿@using Project.Client.Helpers
+@using Project.Client.Services
+@using System.Text.Json
+@inject IJSRuntime JsRuntime
+
+@inject NavigationManager Navigation
+@inject IMenuService MenuService
+<link href="css/icon-moon.css" rel="stylesheet">
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        list-style: none; /* Quitar los marcadores de lista */
+        padding: 0; /* Eliminar el espacio interior */
+        margin: 0; /* Eliminar el espacio exterior */
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    /* Optional: Change the background color and text color of dropdown button when hovered */
+    .dropdown:hover .dropdown-toggle {
+        background-color: #3e8e41;
+        color: white;
+    }
+</style>
+
+<div id="header2">
+    <div class="row">
+        <div class="col-sm-3 col-md-6 col-lg-2">
+            <a href="@($"{Navigation.BaseUri}/")">
+                <img src="/images/Logo-Header2miniEMA.png" alt="">
+            </a>
+        </div>
+        <div class="col-sm-9 col-md-6 col-lg-10">
+            <section id="login">
+
+                @if (!MenuService.IsMenuVisible)
+                {
+                    <a id="LoginView1_btnLogin" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$LoginView1$btnLogin&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Login&quot;, false, true))">
+                        <i class="oi oi-person"></i><span id="LoginText" class="text">Iniciar sesión</span>
+                    </a>
+                }
+                else
+                {
+                    <div id="user-nav" class="navbar navbar-right">
+                        <ul class="nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle">
+                                    <span class="icon"><img src="/images/user-tie.svg" style="color: #344882;width:18px;"></span>
+                                   @*  <span id="LoginView1_lblUser" class="text">PRUEBA (usuario_ema)</span> *@
+                                    <span id="LoginView1_lblUser" class="text">AAAAAAAAAAAAAAAAAAAAA</span>
+                                   @*  lblUser.Text = $"{emp.RazonSocial} ({usu.UserName})"; *@
+                                </a>
+                                <ul class="dropdown-content">
+                                    <li>
+                                        <a href="@($"{Navigation.BaseUri}cambiarcontrasena")">
+                                            <span class="icon"><img src="/images/pencil.svg" style="color: #344882;width:12px;"></span>
+                                            <span class="text">Cambiar Contraseña</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@($"{Navigation.BaseUri}/")">
+                                            <span class="icon"><img src="/images/switch.svg" style="color: #344882;width:12px;"></span>
+                                            <span class="text">Cerrar Sesión</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                }
+
+            </section>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@code {
+    protected async override void OnInitialized()
+    {
+
+        MenuService.OnMenuVisibilityChange += HandleMenuVisibilityChange;
+    }
+
+    private async void HandleMenuVisibilityChange(bool isVisible)
+    {
+        if (isVisible)
+        {
+            string emaJson = await JsRuntime.GetFromLocalStorage("ema");
+            
+            string aspNetUserJson = await JsRuntime.GetFromLocalStorage("aspNetUser");
+
+
+        }
+        // Actualiza la UI cuando cambie la visibilidad del menú
+        StateHasChanged();
+    }
+    private async Task BeginLogout(MouseEventArgs args)
+    {
+        // await SignOutManager.SetSignOutState();
+        // Navigation.NavigateTo("authentication/logout");
+    }
+
+}

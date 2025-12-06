@@ -1,0 +1,129 @@
+﻿@* @if (MostrarDiv)
+{ *@
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu" style="background:#444444;margin:0;padding:0;display:flex;flex-direction: column; ">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="inicio" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Inicio
+            </NavLink>
+        </div>
+
+
+
+        <div class="nav-item px-3 dropdown">
+            <button class="nav-link dropdown-toggle" id="medicamentosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background:none; border:none; padding:0; color:white;">
+                <span class="oi oi-plus" aria-hidden="true"></span> Transacciones
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="medicamentosDropdown" style="background-color:#444444; border: 1px solid white; color:white;">
+                <li>
+                    <NavLink class="nav-link" href="/transacciones/t_transaccion_cabecera" style="color:white; display:block; padding:0.25rem 1.5rem; text-decoration:none;">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Adm-Transacciones
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="dropdown-item" href="/transacciones/ajuste" style="color:white; display:block; padding:0.25rem 1.5rem; text-decoration:none;">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Ajustes
+                    </NavLink>
+                </li>
+              
+                
+            </ul>
+        </div>
+
+
+
+
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_composicion_de_deposito">
+                <span class="oi oi-plus" aria-hidden="true"></span> Comp. de Dep.
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_deposito">
+                <span class="oi oi-plus" aria-hidden="true"></span> Deposito
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_seccion">
+                <span class="oi oi-plus" aria-hidden="true"></span> Seccion
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_ubicacion">
+                <span class="oi oi-plus" aria-hidden="true"></span> Ubicacion
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_tipoarticulo">
+                <span class="oi oi-plus" aria-hidden="true"></span> Tipo Articulo
+            </NavLink>
+        </div>
+
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_paciente">
+                <span class="oi oi-plus" aria-hidden="true"></span> Paciente
+            </NavLink>
+        </div>
+
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/abms/t_episodio">
+                <span class="oi oi-plus" aria-hidden="true"></span> Episodio
+            </NavLink>
+        </div>
+
+
+
+
+
+
+        @* <div class="nav-item px-3">
+            <NavLink class="nav-link" href="seguridad">
+                <span class="oi oi-plus" aria-hidden="true"></span> Seguridad
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="buscadoroperativo">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Buscador Operativo
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="declararrecargarmatafuegos">
+                <span class="icon">
+                    <img src="/images/fireextinguisher.svg" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);">
+                </span> Declarar/Recargar Matafuegos
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="compradetarjetas">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Compra de Tarjetas
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="recargarporoblea">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Recargar por Oblea
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="operaciones">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Operaciones
+            </NavLink>
+        </div> *@
+    </nav>
+</div>
+@* } *@
+@code {
+    [Parameter]
+    public bool MostrarDiv { get; set; }
+
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
