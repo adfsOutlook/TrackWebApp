@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Project.Shared.Models;
+
 namespace Project.Server.Models
 {
     public partial class TrackContext : DbContext
@@ -160,13 +160,25 @@ namespace Project.Server.Models
             {
                 entity.ToTable("LOCALIZACIONES");
 
+                entity.Property(e => e.Distancia)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.FechaHoraGps)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.HoraLlegada)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Latitud).HasColumnType("decimal(9, 6)");
 
                 entity.Property(e => e.Longitud).HasColumnType("decimal(9, 6)");
+
+                entity.Property(e => e.Tiempo)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.IdEntregaNavigation)
                     .WithMany(p => p.Localizaciones)

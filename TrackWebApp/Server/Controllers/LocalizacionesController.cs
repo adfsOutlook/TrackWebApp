@@ -46,6 +46,9 @@ namespace Project.Server.Controllers
                     Longitud = e.Longitud,
                     FechaHoraGps = e.FechaHoraGps,
                     IdEntrega = e.IdEntrega,
+                    Distancia = e.Distancia,
+                    Tiempo = e.Tiempo,
+                    HoraLlegada = e.HoraLlegada
 
                 }).Where(x => x.IdUsuario == idUsuario).ToList();
             }
@@ -60,6 +63,45 @@ namespace Project.Server.Controllers
 
             return localizacionesDtoList;
         }
+
+        [HttpGet("LocalizacionesDtoGetByIdEntrega/{IdEntrega}")]
+        public async Task<ActionResult<IEnumerable<LocalizacionesDto>>> LocalizacionesDtoGetByIdEntrega(int IdEntrega)
+        {
+
+            var adminsQueryable = _context.Localizaciones.AsQueryable();
+
+            List<LocalizacionesDto> localizacionesDtoList = null;
+            try
+            {
+                var localizaciones = await adminsQueryable.ToListAsync();
+                localizacionesDtoList = localizaciones.Select(e => new LocalizacionesDto
+                {
+                    // Asigná las propiedades que correspondan
+                    Id = e.Id,
+                    IdUsuario = e.IdUsuario,
+                    Latitud = e.Latitud,
+                    Longitud = e.Longitud,
+                    FechaHoraGps = e.FechaHoraGps,
+                    IdEntrega = e.IdEntrega,
+                    Distancia = e.Distancia,
+                    Tiempo = e.Tiempo,
+                    HoraLlegada = e.HoraLlegada
+
+
+                }).Where(x => x.IdEntrega == IdEntrega).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                return NotFound();
+
+            }
+
+
+
+            return localizacionesDtoList;
+        }
+
 
 
         [HttpPost("LocalizacionPost")]
@@ -109,7 +151,10 @@ namespace Project.Server.Controllers
                         Latitud = e.Latitud,
                         Longitud = e.Longitud,
                         FechaHoraGps = e.FechaHoraGps,
-                        IdEntrega = e.IdEntrega
+                        IdEntrega = e.IdEntrega,
+                        Distancia = e.Distancia,
+                        Tiempo = e.Tiempo,
+                        HoraLlegada = e.HoraLlegada
                     })
                     .FirstOrDefaultAsync();
 
@@ -139,7 +184,10 @@ namespace Project.Server.Controllers
                         Latitud = e.Latitud,
                         Longitud = e.Longitud,
                         FechaHoraGps = e.FechaHoraGps,
-                        IdEntrega = e.IdEntrega
+                        IdEntrega = e.IdEntrega,
+                        Distancia = e.Distancia,
+                        Tiempo = e.Tiempo,
+                        HoraLlegada = e.HoraLlegada
                     })
                     .FirstOrDefaultAsync();
 
@@ -153,13 +201,6 @@ namespace Project.Server.Controllers
                 return StatusCode(500, "Error al obtener la última localización del usuario.");
             }
         }
-
-
-
-
-
-
-
 
     }
 }

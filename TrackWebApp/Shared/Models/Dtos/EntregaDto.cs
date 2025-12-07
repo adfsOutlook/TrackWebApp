@@ -38,7 +38,7 @@ namespace Project.Shared.Models
         public string? EntregaDocumentos { get; set; }
         public decimal? Latitud { get; set; }
         public decimal? Longitud { get; set; }
-
+        public short? Estado { get; set; }
 
     }
 }

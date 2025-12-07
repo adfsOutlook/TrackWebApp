@@ -13,8 +13,8 @@ namespace Project.Shared.Models
         public int? IdEntrega { get; set; }
 
         // Datos de Google
-        public string? Tiempo { get; set; }
         public string? Distancia { get; set; }
+        public string? Tiempo { get; set; }
         public string? HoraLlegada { get; set; }
 
     }

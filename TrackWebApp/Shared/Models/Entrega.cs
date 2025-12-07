@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project.Shared.Models
+namespace Project.Server.Models
 {
     public partial class Entrega
     {
@@ -43,6 +43,7 @@ namespace Project.Shared.Models
         public string? EntregaDocumentos { get; set; }
         public decimal? Latitud { get; set; }
         public decimal? Longitud { get; set; }
+        public short? Estado { get; set; }
 
         public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioAsignadoNavigation { get; set; } = null!;

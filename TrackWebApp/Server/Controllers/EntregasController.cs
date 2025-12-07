@@ -70,7 +70,8 @@ namespace Project.Server.Controllers
                     EntregaFlNoEntregado = e.EntregaFlNoEntregado,
                     EntregaDocumentos = e.EntregaDocumentos,
                     Latitud = e.Latitud,
-                    Longitud = e.Longitud
+                    Longitud = e.Longitud,
+                    Estado = e.Estado
 
                 }).Where(x => x.IdUsuarioAsignado == IdUsuario).ToList();
             }
@@ -130,7 +131,8 @@ namespace Project.Server.Controllers
                     EntregaFlNoEntregado = e.EntregaFlNoEntregado,
                     EntregaDocumentos = e.EntregaDocumentos,
                     Latitud = e.Latitud,
-                    Longitud = e.Longitud
+                    Longitud = e.Longitud,
+                    Estado = e.Estado   
 
                 }).Where(x => x.Id == IdEntrega).ToList();
             }
@@ -190,7 +192,8 @@ namespace Project.Server.Controllers
                     EntregaFlNoEntregado = e.EntregaFlNoEntregado,
                     EntregaDocumentos = e.EntregaDocumentos,
                     Latitud=e.Latitud  ,
-                    Longitud=e.Longitud
+                    Longitud=e.Longitud,
+                    Estado = e.Estado
 
                 }).ToList();
             }
@@ -244,7 +247,8 @@ namespace Project.Server.Controllers
              EntregaFlNoEntregado = e.EntregaFlNoEntregado,
              EntregaDocumentos = e.EntregaDocumentos,
              Latitud = e.Latitud,
-             Longitud = e.Longitud
+             Longitud = e.Longitud,
+             Estado = e.Estado
          })
          .ToListAsync();
 
@@ -293,7 +297,8 @@ namespace Project.Server.Controllers
                         //EntregaFlNoEntregado = entregaDto.EntregaFlNoEntregado,
                         //EntregaDocumentos = entregaDto.EntregaDocumentos
                         Latitud = entregaDto.Latitud,
-                        Longitud = entregaDto.Longitud
+                        Longitud = entregaDto.Longitud,
+                        Estado = (short?)EstadoEntrega.Creando
                     };
                     _context.Entregas.Add(entrega);
 
@@ -309,26 +314,59 @@ namespace Project.Server.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("EntregaPut")]
         public async Task<ActionResult<Entrega>> EntregaPut(EntregaDto entregaDto)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    Localizacione localizacion = new Localizacione
-                    {
-                        FechaHoraGps = DateTime.UtcNow,
-                        IdUsuario = entregaDto.IdUsuarioAsignado
-                    };
-                    _context.Localizaciones.Add(localizacion);
-                    // 2. Buscar y actualizar la entrega
+                    // Buscar y actualizar la entrega
                     var entregaExistente = await _context.Entregas.FindAsync(entregaDto.Id);
                     if (entregaExistente == null)
                     {
                         await transaction.RollbackAsync();
-                        return NotFound();
+                        return NotFound("No se encontró la entrega.");
                     }
+                    entregaExistente.IdEmpresa = entregaDto.IdEmpresa;
+                    entregaExistente.IdUsuarioAsignado = entregaDto.IdUsuarioAsignado;
+                    entregaExistente.IdAgendaUsuario = entregaDto.IdAgendaUsuario;
+                    entregaExistente.IdRutaUsuario = entregaDto.IdRutaUsuario;
+                    entregaExistente.FechaIngreso = entregaDto.FechaIngreso;
+                    entregaExistente.IdSisResponsableIngreso = entregaDto.IdSisResponsableIngreso;
+                    entregaExistente.IdSisTramite = entregaDto.IdSisTramite;
+                    entregaExistente.SisTramite = entregaDto.SisTramite;
+                    entregaExistente.Origen = entregaDto.Origen;
+                    entregaExistente.FechaHoraEntrega = entregaDto.FechaHoraEntrega;
+                    entregaExistente.LugarEntrega = entregaDto.LugarEntrega;
+                    entregaExistente.IdSisInstitucion = entregaDto.IdSisInstitucion;
+                    entregaExistente.SectorEntrega = entregaDto.SectorEntrega;
+                    entregaExistente.DireccionEntrega = entregaDto.DireccionEntrega;
+                    entregaExistente.LocalidadEntrega = entregaDto.LocalidadEntrega;
+                    entregaExistente.ProvinciaEntrega = entregaDto.ProvinciaEntrega;
+                    entregaExistente.TelefonoEntrega = entregaDto.TelefonoEntrega;
+                    entregaExistente.Medico = entregaDto.Medico;
+                    entregaExistente.IdSisMedico = entregaDto.IdSisMedico;
+                    entregaExistente.Cliente = entregaDto.Cliente;
+                    entregaExistente.IdSisCliente = entregaDto.IdSisCliente;
+                    entregaExistente.Material = entregaDto.Material;
+                    entregaExistente.Observaciones = entregaDto.Observaciones;
+
+                    // 🔥 Campos de estado de entrega
+                    entregaExistente.EntregaFlEntregado = entregaDto.EntregaFlEntregado;
+                    entregaExistente.EntregaFechaHora = entregaDto.EntregaFechaHora;
+                    entregaExistente.EntregaObservaciones = entregaDto.EntregaObservaciones;
+                    entregaExistente.EntregaFlProblemas = entregaDto.EntregaFlProblemas;
+                    entregaExistente.EntregaFlTarde = entregaDto.EntregaFlTarde;
+                    entregaExistente.EntregaFlNoEntregado = entregaDto.EntregaFlNoEntregado;
+                    entregaExistente.EntregaDocumentos = entregaDto.EntregaDocumentos;
+
+                    // 🔥 Coordenadas
+                    entregaExistente.Latitud = entregaDto.Latitud;
+                    entregaExistente.Longitud = entregaDto.Longitud;
+                    entregaExistente.Estado = entregaDto.Estado;
+
+
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
                     return Ok(entregaExistente);
@@ -338,11 +376,6 @@ namespace Project.Server.Controllers
                     transaction.Rollback();
                     return StatusCode(500, ex.Message);
                 }
-
-
-
-
-
             }
         }
 

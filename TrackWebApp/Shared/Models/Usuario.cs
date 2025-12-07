@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project.Shared.Models
+namespace Project.Server.Models
 {
     public partial class Usuario
     {
@@ -21,7 +21,7 @@ namespace Project.Shared.Models
         public decimal? Latitud { get; set; }
         public decimal? Longitud { get; set; }
         public DateTime? FechaHoraGps { get; set; }
-       
+
         public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
         public virtual ICollection<Entrega> Entregas { get; set; }
         public virtual ICollection<Localizacione> Localizaciones { get; set; }
