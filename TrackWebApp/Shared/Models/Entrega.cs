@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project.Server.Models
+namespace Project.Shared.Models
 {
     public partial class Entrega
     {
         public Entrega()
         {
+            Archivos = new HashSet<Archivo>();
+            Imagenes = new HashSet<Imagene>();
             Localizaciones = new HashSet<Localizacione>();
         }
 
@@ -47,6 +49,8 @@ namespace Project.Server.Models
 
         public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioAsignadoNavigation { get; set; } = null!;
+        public virtual ICollection<Archivo> Archivos { get; set; }
+        public virtual ICollection<Imagene> Imagenes { get; set; }
         public virtual ICollection<Localizacione> Localizaciones { get; set; }
     }
 }

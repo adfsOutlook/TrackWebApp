@@ -76,7 +76,8 @@ namespace Project.Server.Controllers
                 Id = i.Id,
                 IdEntrega = i.IdEntrega,
                 Contenido = null, // opcional, para no mandar binario pesado
-                TipoMime = i.TipoMime,
+                TipoMime = i.TipoMime, 
+                 FechaAlta = i.FechaAlta,
                 ContenidoBase64 = i.Contenido != null
                     ? $"data:{i.TipoMime};base64,{Convert.ToBase64String(i.Contenido)}"
                     : null

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
+using Project.Shared.Models;
 namespace Project.Server.Models
 {
     public partial class TrackContext : DbContext
@@ -16,6 +16,7 @@ namespace Project.Server.Models
         {
         }
 
+        public virtual DbSet<Archivo> Archivos { get; set; } = null!;
         public virtual DbSet<Empresa> Empresas { get; set; } = null!;
         public virtual DbSet<Entrega> Entregas { get; set; } = null!;
         public virtual DbSet<Imagene> Imagenes { get; set; } = null!;
@@ -33,6 +34,22 @@ namespace Project.Server.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Archivo>(entity =>
+            {
+                entity.ToTable("ARCHIVOS");
+
+                entity.Property(e => e.FechaAlta).HasDefaultValueSql("(sysdatetime())");
+
+                entity.Property(e => e.NombreArchivo).HasMaxLength(255);
+
+                entity.Property(e => e.TipoMime).HasMaxLength(100);
+
+                entity.HasOne(d => d.IdEntregaNavigation)
+                    .WithMany(p => p.Archivos)
+                    .HasForeignKey(d => d.IdEntrega)
+                    .HasConstraintName("FK_ARCHIVOS_ENTREGAS");
+            });
+
             modelBuilder.Entity<Empresa>(entity =>
             {
                 entity.ToTable("EMPRESAS");
@@ -153,7 +170,14 @@ namespace Project.Server.Models
             {
                 entity.ToTable("IMAGENES");
 
+                entity.Property(e => e.FechaAlta).HasDefaultValueSql("(sysdatetime())");
+
                 entity.Property(e => e.TipoMime).HasMaxLength(100);
+
+                entity.HasOne(d => d.IdEntregaNavigation)
+                    .WithMany(p => p.Imagenes)
+                    .HasForeignKey(d => d.IdEntrega)
+                    .HasConstraintName("FK_IMAGENES_ENTREGAS");
             });
 
             modelBuilder.Entity<Localizacione>(entity =>

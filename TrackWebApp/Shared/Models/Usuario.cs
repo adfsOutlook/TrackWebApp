@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project.Server.Models
+namespace Project.Shared.Models
 {
     public partial class Usuario
     {

@@ -116,7 +116,10 @@ namespace Project.Server.Controllers
                     Latitud = localizacionesDto.Latitud,
                     Longitud = localizacionesDto.Longitud,
                     FechaHoraGps = DateTime.UtcNow,
-                    IdEntrega = localizacionesDto.IdEntrega
+                    IdEntrega = localizacionesDto.IdEntrega,
+                    Distancia = localizacionesDto.Distancia,
+                    Tiempo = localizacionesDto.Tiempo,
+                    HoraLlegada = localizacionesDto.HoraLlegada
                 };
 
                 _context.Localizaciones.Add(localizacion);
