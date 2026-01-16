@@ -65,26 +65,26 @@ namespace Project.Server.Controllers
         }
 
         [HttpGet("GetImagenesByIdEntrega/{IdEntrega}")]
-        public async Task<ActionResult<IEnumerable<Imagene>>> GetImagenesByIdEntrega(int IdEntrega)
+        public async Task<ActionResult<IEnumerable<ImagenesDto>>> GetImagenesByIdEntrega(int IdEntrega)
         {
             var imagenes = await _context.Imagenes
-            .Where(i => i.IdEntrega == IdEntrega)
-            .ToListAsync();
+                .Where(i => i.IdEntrega == IdEntrega)
+                .Select(i => new ImagenesDto
+                {
+                    Id = i.Id,
+                    IdEntrega = i.IdEntrega,
+                    TipoMime = i.TipoMime,
+                    FechaAlta = i.FechaAlta,
+                    Contenido = null,
+                    ContenidoBase64 = i.Contenido != null
+                ? Convert.ToBase64String(i.Contenido)
+                : null
+                })
+                .ToListAsync();
 
-            var result = imagenes.Select(i => new ImagenesDto
-            {
-                Id = i.Id,
-                IdEntrega = i.IdEntrega,
-                Contenido = null, // opcional, para no mandar binario pesado
-                TipoMime = i.TipoMime, 
-                 FechaAlta = i.FechaAlta,
-                ContenidoBase64 = i.Contenido != null
-                    ? $"data:{i.TipoMime};base64,{Convert.ToBase64String(i.Contenido)}"
-                    : null
-            });
-
-            return Ok(result);
+            return Ok(imagenes);
         }
+
 
         [HttpPost]
         public async Task<ActionResult<ImagenesDto>> SubirImagen([FromBody] ImagenesDto dto)
@@ -129,6 +129,19 @@ namespace Project.Server.Controllers
             return CreatedAtAction(nameof(GetImagenesByIdEntrega),
                 new { idEntrega = imagen.IdEntrega }, result);
         }
+
+            [HttpDelete("{id}")]
+            public async Task<IActionResult> Eliminar(int id)
+            {
+                var imagen = await _context.Imagenes.FindAsync(id);
+                if (imagen == null)
+                    return NotFound();
+
+                _context.Imagenes.Remove(imagen);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
 
         #endregion
 

@@ -46,23 +46,22 @@ namespace Project.Server.Controllers
         {
             var archivos = await _context.Archivos
                 .Where(a => a.IdEntrega == IdEntrega)
+                .Select(a => new ArchivosDto
+                {
+                    Id = a.Id,
+                    IdEntrega = a.IdEntrega,
+                    NombreArchivo = a.NombreArchivo,
+                    TipoMime = a.TipoMime,
+                    TamanoBytes = a.TamanoBytes,
+                    FechaAlta = a.FechaAlta,
+                    Contenido = null,
+                    ContenidoBase64 = null   // 👈 NO contenido acá
+                })
                 .ToListAsync();
 
-            var result = archivos.Select(a => new ArchivosDto
-            {
-                Id = a.Id,
-                IdEntrega = a.IdEntrega,
-                NombreArchivo = a.NombreArchivo,
-                TipoMime = a.TipoMime,
-                TamanoBytes = a.TamanoBytes,
-                FechaAlta = a.FechaAlta,
-                Contenido = null,           // no mandar binario
-                ContenidoBase64 = a.Contenido != null
-                ? $"data:{a.TipoMime};base64,{Convert.ToBase64String(a.Contenido)}" : null
-            });
-
-            return Ok(result);
+            return Ok(archivos);
         }
+
 
 
         [HttpPost]
@@ -78,8 +77,8 @@ namespace Project.Server.Controllers
             try
             {
                 var base64 = dto.ContenidoBase64;
-                if (base64.Contains(","))
-                    base64 = base64.Substring(base64.IndexOf(",") + 1);
+                if (base64.Contains(";base64,"))
+                    base64 = base64.Split(";base64,")[1];
 
                 contenido = Convert.FromBase64String(base64);
             }
