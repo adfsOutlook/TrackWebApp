@@ -111,7 +111,8 @@ namespace Project.Server.Controllers
             {
                 IdEntrega = dto.IdEntrega,
                 TipoMime = dto.TipoMime,
-                Contenido = contenido
+                Contenido = contenido,
+                FechaAlta = DateTime.UtcNow
             };
 
             _context.Imagenes.Add(imagen);
@@ -123,14 +124,15 @@ namespace Project.Server.Controllers
                 Id = imagen.Id,
                 IdEntrega = imagen.IdEntrega,
                 TipoMime = imagen.TipoMime,
+                FechaAlta = imagen.FechaAlta,
                 ContenidoBase64 = $"data:{imagen.TipoMime};base64,{dto.ContenidoBase64}"
             };
 
-            return CreatedAtAction(nameof(GetImagenesByIdEntrega),
-                new { idEntrega = imagen.IdEntrega }, result);
+            return Ok(result);
+
         }
 
-            [HttpDelete("{id}")]
+        [HttpDelete("{id}")]
             public async Task<IActionResult> Eliminar(int id)
             {
                 var imagen = await _context.Imagenes.FindAsync(id);
