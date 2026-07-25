@@ -52,6 +52,31 @@ namespace Project.Server.Controllers
             return empresasDtoList;
         }
 
+        [HttpGet("EmpresasDtoGetById")]
+        public async Task<ActionResult<EmpresaDto>> EmpresasDtoGetById(Guid Id)
+        {
+            var adminsQueryable = _context.Empresas.AsQueryable();
+
+            EmpresaDto? empresasDto = null;
+            try
+            {
+                var empresas = await adminsQueryable.ToListAsync();
+
+                empresasDto = empresas.Select(e => new EmpresaDto
+                {
+                    // Asigná las propiedades que correspondan
+                    Id = e.Id,
+                    Nombre = e.Nombre,
+                    Cuit = e.Cuit,
+                    FlActivo = e.FlActivo
+                }).Where(x => x.Id == Id).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
+            return empresasDto;
+        }
 
         [HttpPost("EmpresaPost")]
         public async Task<ActionResult<Empresa>> EmpresaPost(EmpresaDto empresaDto)

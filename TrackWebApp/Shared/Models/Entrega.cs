@@ -46,6 +46,9 @@ namespace Project.Shared.Models
         public decimal? Latitud { get; set; }
         public decimal? Longitud { get; set; }
         public short? Estado { get; set; }
+        public string? Tipo { get; set; }
+        public string? PacienteNombre { get; set; }
+        public string? PacienteDni { get; set; }
 
         public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioAsignadoNavigation { get; set; } = null!;

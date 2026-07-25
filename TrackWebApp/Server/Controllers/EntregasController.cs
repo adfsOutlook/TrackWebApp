@@ -23,7 +23,7 @@ namespace Project.Server.Controllers
             _context = context;
         }
 
-  
+
         #region ENTREGAS
 
         [HttpGet("EntregasDtoGetByIdUsuarioEntregado/{IdUsuario}/{Entregado}")]
@@ -71,7 +71,10 @@ namespace Project.Server.Controllers
                     EntregaDocumentos = e.EntregaDocumentos,
                     Latitud = e.Latitud,
                     Longitud = e.Longitud,
-                    Estado = e.Estado
+                    Estado = e.Estado,
+                    Tipo = e.Tipo,
+                    PacienteNombre = e.PacienteNombre,
+                    PacienteDni = e.PacienteDni
 
                 }).Where(x => x.IdUsuarioAsignado == IdUsuario).ToList();
             }
@@ -132,7 +135,10 @@ namespace Project.Server.Controllers
                     EntregaDocumentos = e.EntregaDocumentos,
                     Latitud = e.Latitud,
                     Longitud = e.Longitud,
-                    Estado = e.Estado   
+                    Estado = e.Estado,
+                    Tipo = e.Tipo,
+                    PacienteNombre = e.PacienteNombre,
+                    PacienteDni = e.PacienteDni
 
                 }).Where(x => x.Id == IdEntrega).ToList();
             }
@@ -191,9 +197,12 @@ namespace Project.Server.Controllers
                     EntregaFlTarde = e.EntregaFlTarde,
                     EntregaFlNoEntregado = e.EntregaFlNoEntregado,
                     EntregaDocumentos = e.EntregaDocumentos,
-                    Latitud=e.Latitud  ,
-                    Longitud=e.Longitud,
-                    Estado = e.Estado
+                    Latitud = e.Latitud,
+                    Longitud = e.Longitud,
+                    Estado = e.Estado,
+                    Tipo = e.Tipo,
+                    PacienteNombre = e.PacienteNombre,
+                    PacienteDni = e.PacienteDni
 
                 }).ToList();
             }
@@ -248,16 +257,19 @@ namespace Project.Server.Controllers
              EntregaDocumentos = e.EntregaDocumentos,
              Latitud = e.Latitud,
              Longitud = e.Longitud,
-             Estado = e.Estado
+             Estado = e.Estado,
+             Tipo = e.Tipo,
+             PacienteNombre = e.PacienteNombre,
+             PacienteDni = e.PacienteDni
          })
          .ToListAsync();
 
             return Ok(entregasDtoList);
         }
-   
+
 
         [HttpPost("EntregaPost")]
-        public async Task<ActionResult<Entrega>>EntregaPost(EntregaDto entregaDto)
+        public async Task<ActionResult<Entrega>> EntregaPost(EntregaDto entregaDto)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -265,7 +277,7 @@ namespace Project.Server.Controllers
                 {
                     Entrega entrega = new Entrega
                     {
-                       // Id = entregaDto.Id,
+                        // Id = entregaDto.Id,
                         IdEmpresa = entregaDto.IdEmpresa,
                         IdUsuarioAsignado = entregaDto.IdUsuarioAsignado,
                         IdAgendaUsuario = entregaDto.IdAgendaUsuario,
@@ -298,7 +310,10 @@ namespace Project.Server.Controllers
                         //EntregaDocumentos = entregaDto.EntregaDocumentos
                         Latitud = entregaDto.Latitud,
                         Longitud = entregaDto.Longitud,
-                        Estado = (short?)EstadoEntrega.Creando
+                        Estado = (short?)EstadoEntrega.Creando,
+                        Tipo = entregaDto.Tipo,
+                        PacienteNombre = entregaDto.PacienteNombre,
+                        PacienteDni = entregaDto.PacienteDni
                     };
                     _context.Entregas.Add(entrega);
 
@@ -365,7 +380,9 @@ namespace Project.Server.Controllers
                     entregaExistente.Latitud = entregaDto.Latitud;
                     entregaExistente.Longitud = entregaDto.Longitud;
                     entregaExistente.Estado = entregaDto.Estado;
-
+                    entregaExistente.Tipo = entregaDto.Tipo;
+                    entregaExistente.PacienteNombre = entregaDto.PacienteNombre;
+                    entregaExistente.PacienteDni = entregaDto.PacienteDni;
 
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
@@ -381,6 +398,6 @@ namespace Project.Server.Controllers
 
         #endregion
 
- 
+
     }
 }

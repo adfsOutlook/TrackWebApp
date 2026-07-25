@@ -139,6 +139,13 @@ namespace Project.Server.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.PacienteDni)
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .HasColumnName("PacienteDNI");
+
+                entity.Property(e => e.PacienteNombre).HasMaxLength(100);
+
                 entity.Property(e => e.ProvinciaEntrega)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -152,6 +159,11 @@ namespace Project.Server.Models
                 entity.Property(e => e.TelefonoEntrega)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Tipo)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.IdEmpresaNavigation)
                     .WithMany(p => p.Entregas)
