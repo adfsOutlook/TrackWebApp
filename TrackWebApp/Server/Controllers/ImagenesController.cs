@@ -10,7 +10,7 @@ using Project.Server;
 using Project.Server.Models;
 using Project.Shared.Models;
 using Project.Shared.Models.Dtos;
-using static Project.Client.Pages.Domain;
+//using static Project.Client.Pages.Domain;
 namespace Project.Server.Controllers
 {
     [Route("api/[controller]")]

@@ -1,15 +1,15 @@
-﻿using Project.Server.Data;
-
-using Microsoft.EntityFrameworkCore;
+﻿
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Project.Server.Services;  // Agregado para Swagger
-
+using Project.Server.Hubs;
 using Project.Server.Models;
+using Project.Server.Services;  // Agregado para Swagger
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<TrackContext>(options =>
@@ -75,6 +75,17 @@ else
     app.UseHsts();
 }
 
+
+app.UseHttpsRedirection();
+
+app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+// Habilitar CORS
+app.UseCors("AllowAllOrigins");  // Esto va aquí
+
+
 #region PONER DENTRO DE IF DE DESARROLLO PARA QUE NO SE MUESTRE EN PRODUCCION
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -84,23 +95,10 @@ app.UseSwaggerUI(c =>
 });
 #endregion
 
-// Habilitar CORS
-app.UseCors("AllowAllOrigins");  // Esto va aquí
-
-
-app.UseHttpsRedirection();
-
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
 
 app.MapRazorPages();
 app.MapControllers();
+app.MapHub<EntregaHub>("/entregaHub");
 app.MapFallbackToFile("index.html");
 
 app.Run();

@@ -6,7 +6,7 @@ To see if you require a commercial license for Duende IdentityServer please see 
 
 
  Scaffold-DbContext -Connection name=TrackConn -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context TrackContext -Force
-
+ Scaffold-DbContext -Connection Name=TrackConn -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context TrackContext -Force
 using Project.Shared.Models;
 
 demos syncfusion

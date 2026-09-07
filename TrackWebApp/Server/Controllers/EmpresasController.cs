@@ -10,7 +10,7 @@ using Project.Server;
 using Project.Server.Models;
 using Project.Shared.Models;
 using Project.Shared.Models.Dtos;
-using static Project.Client.Pages.Domain;
+//using static Project.Client.Pages.Domain;
 namespace Project.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -53,29 +53,23 @@ namespace Project.Server.Controllers
         }
 
         [HttpGet("EmpresasDtoGetById")]
-        public async Task<ActionResult<EmpresaDto>> EmpresasDtoGetById(Guid Id)
+        public async Task<ActionResult<EmpresaDto>> EmpresasDtoGetById(Guid id)
         {
-            var adminsQueryable = _context.Empresas.AsQueryable();
-
-            EmpresaDto? empresasDto = null;
-            try
-            {
-                var empresas = await adminsQueryable.ToListAsync();
-
-                empresasDto = empresas.Select(e => new EmpresaDto
+            var empresaDto = await _context.Empresas
+                .Where(e => e.Id == id)
+                .Select(e => new EmpresaDto
                 {
-                    // Asigná las propiedades que correspondan
                     Id = e.Id,
                     Nombre = e.Nombre,
                     Cuit = e.Cuit,
                     FlActivo = e.FlActivo
-                }).Where(x => x.Id == Id).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
+                })
+                .FirstOrDefaultAsync();
+
+            if (empresaDto == null)
                 return NotFound();
-            }
-            return empresasDto;
+
+            return empresaDto;
         }
 
         [HttpPost("EmpresaPost")]

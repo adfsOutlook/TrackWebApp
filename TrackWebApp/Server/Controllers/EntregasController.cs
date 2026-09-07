@@ -10,7 +10,8 @@ using Project.Server;
 using Project.Server.Models;
 using Project.Shared.Models;
 using Project.Shared.Models.Dtos;
-using static Project.Client.Pages.Domain;
+using Microsoft.AspNetCore.SignalR;
+using Project.Server.Hubs;
 namespace Project.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -18,9 +19,11 @@ namespace Project.Server.Controllers
     public class EntregasController : ControllerBase
     {
         private readonly TrackContext _context;
-        public EntregasController(TrackContext context)
+        private readonly IHubContext<EntregaHub> _hubContext;
+        public EntregasController(TrackContext context, IHubContext<EntregaHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
 
@@ -386,6 +389,17 @@ namespace Project.Server.Controllers
 
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
+
+                    #region SignalR
+                    //await _hubContext.Clients.All.SendAsync("EntregaActualizada", entregaDto);
+                    await _hubContext.Clients.All.SendAsync("EntregaActualizada",
+                            new
+                            {
+                                Id = entregaExistente.Id,
+                                Estado = entregaExistente.Estado
+                            });
+                    #endregion
+
                     return Ok(entregaExistente);
                 }
                 catch (Exception ex)
